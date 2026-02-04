@@ -62,50 +62,6 @@ void showWrapped2Lines(const String &text)
 
   showMessage2(l1, l2);
 }
-String deviceId()
-{
-  String mac = WiFi.macAddress();
-  mac.replace(":", "");
-  return "ESP32-" + mac;
-}
-
-void executeAction(JsonObject a)
-{
-  const char *type = a["type"] | "";
-
-  if (strcmp(type, "led") == 0)
-  {
-    const char *value = a["value"] | "";
-    if (strcmp(value, "on") == 0)
-    {
-      digitalWrite(LED_PIN, HIGH);
-      ledState = true;
-    }
-    else if (strcmp(value, "off") == 0)
-    {
-      digitalWrite(LED_PIN, LOW);
-      ledState = false;
-    }
-    return;
-  }
-
-  if (strcmp(type, "oled") == 0)
-  {
-    const char *text = a["text"] | "";
-    showWrapped2Lines(String(text));
-    return;
-  }
-
-  if (strcmp(type, "delay_ms") == 0)
-  {
-    int ms = a["ms"] | 0;
-    if (ms > 0)
-      delay((uint32_t)ms);
-    return;
-  }
-
-  Serial.printf("[AI] Unknown action type: %s\n", type);
-}
 
 // ===== BACKEND CALL =====
 String deviceId()
